@@ -1,4 +1,4 @@
-# TrustGuard Architecture (v0.2.1)
+# TrustGuard Architecture
 
 ## Runtime path
 

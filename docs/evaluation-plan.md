@@ -1,4 +1,4 @@
-# TrustGuard Evaluation Plan (v0.2.1)
+# TrustGuard Evaluation Plan
 
 ## Questions
 

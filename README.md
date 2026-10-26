@@ -1,10 +1,10 @@
 # TrustGuard
 
-**TrustGuard v0.2.2 — leak-resistant ML baselines and hosted benchmark workflow.** TrustGuard is a privacy-conscious content-risk analysis demo for spam and policy-violating content. It combines explainable heuristics, optional locally trained classifiers, optional hosted moderation/context agents, a deterministic policy engine, and a human-review boundary.
+**TrustGuard is a privacy-conscious content-risk analysis demo for spam and policy-violating content. It combines explainable heuristics, optional locally trained classifiers, optional hosted moderation/context agents, a deterministic policy engine, and a human-review boundary. This repository is the initial public project baseline; no earlier numbered releases are required to use it.
 
 The application does not require a hosted AI API. Running the Python app directly with no trained artifacts uses the explicitly labelled heuristic baseline. The Docker build is configured to download the official UCI SMS dataset, deduplicate it before splitting, train the spam baseline, and include the generated artifact in the final runtime image. That Docker build therefore requires external access to the UCI dataset host. We do not include fabricated model weights or benchmark results.
 
-## What v0.2.2 adds
+## What is included
 
 - Repeatable training for spam and toxicity classification.
 - Word n-gram and word-plus-character TF-IDF baselines.
@@ -195,14 +195,17 @@ ruff check src tests scripts
 
 Training a classifier writes machine-readable metrics, a local-only test-error CSV, and a model card. The GitHub Actions workflow uploads only the model, aggregate JSON report, and model card. Unit tests use a small synthetic fixture only to test the training software; those tests are **not** the published model benchmark. Do not quote test-fixture metrics as evidence of real-world classifier quality.
 
-## Current state and roadmap
+## Current state and next milestones
 
-- **v0.1.1:** single-service API/UI, safe defaults, Docker and Render configuration.
-- **v0.2.1:** duplicate-safe evaluation, contradictory-label exclusion, hosted model-training workflow, and a multi-stage Docker build that trains the spam baseline without shipping the raw dataset.
-- **v0.2.2:** guided Jupyter notebook for dataset analysis, reproducible training, evaluation plots, and prediction/error inspection; optional notebook dependencies.
-- **v0.3:** challenge set for context (quoted abuse, counterspeech, prompt injection), stronger agent contract tests, human review workflow security.
-- **v0.4:** request rate limiting, cost controls, latency/quality observability, drift tracking, model/policy version monitoring.
-- **v1.0:** deployed public demo with reviewed model artifacts, benchmark report, model card, threat model, architecture diagram, and recorded demonstration.
+The repository currently includes a single-service API and browser UI, optional locally trained spam/toxicity classifiers, a guided Jupyter experiment notebook, duplicate-safe benchmark tooling, automated training workflow, Docker configuration, and a Render deployment blueprint. The real-data benchmark and public deployment still need to be run and verified in the project owner's GitHub/hosting environment.
+
+Next milestones:
+
+- Run the real-data spam training workflow and review held-out metrics and errors.
+- Add a context challenge set for quoted abuse, counterspeech, and prompt injection.
+- Strengthen agent contract tests and secure the human-review workflow.
+- Add rate limiting, cost controls, latency/quality observability, drift tracking, and model/policy version monitoring.
+- Deploy and verify the public demo with a reviewed model artifact, benchmark report, model card, threat model, architecture diagram, and recorded demonstration.
 
 ## Known limitations
 

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "trustguard"
-version = "0.2.2"
+version = "0.1.0"
 description = "An auditable, human-in-the-loop content risk analysis platform with leak-resistant ML benchmarking."
 readme = "README.md"
 requires-python = ">=3.11"

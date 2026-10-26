@@ -1,17 +1,12 @@
 # Changelog
 
-## 0.2.2
-- Add a guided Jupyter notebook for the spam model experiment and error analysis.
-- Add optional Jupyter, pandas, and matplotlib dependencies.
-- Ignore Jupyter checkpoint files and document the notebook workflow.
+## 0.1.0 — Initial public repository baseline
 
-## v0.2.1
+- Add a single-service FastAPI application and browser interface.
+- Add explainable heuristic signals, optional local model integration, and deterministic policy decisions.
+- Add spam/toxicity training workflows and leak-resistant evaluation utilities.
+- Add a guided Jupyter notebook for dataset analysis, model comparison, evaluation, and error inspection.
+- Add automated benchmark workflow, Docker configuration, and Render deployment blueprint.
+- Keep raw datasets, generated model artifacts, and per-example test errors out of the Git repository by default.
 
-- Deduplicate normalized message text before train/validation/test splitting to reduce evaluation leakage.
-- Remove contradictory-label message groups and record deduplication counts.
-- Expose model decision thresholds separately from raw model scores in the API and browser UI.
-- Add a GitHub Actions workflow that trains on the official UCI SMS Spam Collection, verifies the generated artifact, summarizes held-out metrics, and uploads model/report artifacts.
-- Use a multi-stage Docker build that trains the spam baseline during the image build and omits raw data and per-example test errors from the final runtime image.
-- Record dataset license and attribution in model metadata and model cards.
-
-The local execution environment could not reach the external UCI dataset host, so this source release contains no real-data model artifact or fabricated benchmark numbers. The network-enabled GitHub Actions/Docker build performs the real-data training step.
+The repository does not include a fabricated real-data model artifact or benchmark result. Generate and review real-data metrics through the training workflow before presenting model performance claims.

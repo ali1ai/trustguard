@@ -28,7 +28,7 @@ async def lifespan(_: FastAPI):
 app = FastAPI(
     title="TrustGuard",
     description="Privacy-conscious content risk analysis with an explicit human-review boundary.",
-    version="0.2.1",
+    version="0.1.0",
     docs_url="/docs",
     redoc_url=None,
     lifespan=lifespan,
