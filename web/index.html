@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b1020">
+  <meta name="description" content="TrustGuard analyzes user-generated content for spam and policy risk, with transparent signals and human-review recommendations.">
+  <title>TrustGuard | Content Risk Lab</title>
+  <style>
+    :root { color-scheme: dark; --bg:#0b1020; --panel:#121a2c; --panel2:#172238; --line:#29354d; --ink:#edf2fb; --muted:#98a7c2; --mint:#71e0bd; --blue:#7aa8ff; --amber:#ffca72; --red:#ff818f; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:radial-gradient(ellipse at 8% -10%, #1b3151 0, transparent 38%), var(--bg); color:var(--ink); font:15px/1.55 ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+    a { color:var(--mint); }
+    .shell { width:min(1120px, calc(100% - 32px)); margin:0 auto; padding:30px 0 50px; }
+    .top { display:flex; align-items:center; justify-content:space-between; gap:18px; margin-bottom:42px; }
+    .brand { display:flex; align-items:center; gap:12px; font-weight:750; font-size:18px; letter-spacing:-.03em; }
+    .logo { width:40px; height:40px; display:grid; place-items:center; border:1px solid #3b6b6b; color:var(--mint); background:#15333a; border-radius:13px; }
+    .status { color:var(--mint); border:1px solid #28574f; padding:5px 10px; border-radius:999px; font-size:12px; letter-spacing:.03em; }
+    .hero { display:grid; grid-template-columns:minmax(0,1.2fr) minmax(260px,.8fr); gap:36px; align-items:end; margin-bottom:30px; }
+    .eyebrow { color:var(--mint); text-transform:uppercase; font-weight:700; letter-spacing:.16em; font-size:11px; }
+    h1 { margin:12px 0; font-size:clamp(34px,5vw,58px); letter-spacing:-.055em; line-height:1.04; max-width:760px; }
+    .lede { color:var(--muted); max-width:680px; font-size:17px; }
+    .hero-note { border:1px solid var(--line); background:#0f1729cc; padding:18px; border-radius:16px; color:var(--muted); font-size:13px; }
+    .hero-note strong { color:var(--ink); display:block; margin-bottom:5px; font-size:14px; }
+    .layout { display:grid; grid-template-columns:minmax(0,1.02fr) minmax(0,.98fr); gap:18px; align-items:start; }
+    .panel { background:linear-gradient(160deg, #141e32, #101728); border:1px solid var(--line); border-radius:20px; overflow:hidden; box-shadow:0 18px 45px #02061228; }
+    .panel-head { padding:20px 22px 0; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+    h2 { font-size:17px; margin:0; letter-spacing:-.02em; }
+    .panel-body { padding:18px 22px 22px; }
+    .hint { color:var(--muted); font-size:13px; margin:5px 0 15px; }
+    textarea { display:block; width:100%; min-height:205px; resize:vertical; background:#0b1221; border:1px solid #34425d; border-radius:13px; color:var(--ink); padding:14px; font:inherit; outline:none; }
+    textarea:focus { border-color:var(--mint); box-shadow:0 0 0 3px #71e0bd1c; }
+    .sample-row { display:flex; flex-wrap:wrap; gap:8px; margin:12px 0 18px; }
+    button { font:inherit; cursor:pointer; }
+    .sample { padding:7px 10px; background:#172238; color:#cbd7ea; border:1px solid #2e3c56; border-radius:9px; font-size:12px; }
+    .sample:hover { border-color:#6d8bb8; }
+    .primary { width:100%; border:0; border-radius:11px; color:#071811; background:var(--mint); font-weight:760; padding:12px 16px; transition:transform .15s, opacity .15s; }
+    .primary:hover { transform:translateY(-1px); }
+    .primary:disabled { opacity:.6; cursor:wait; transform:none; }
+    .privacy { color:var(--muted); font-size:11px; margin-top:12px; }
+    .result-empty { display:grid; place-items:center; min-height:350px; text-align:center; padding:30px; color:var(--muted); }
+    .empty-mark { display:grid; place-items:center; width:56px; height:56px; border-radius:17px; background:#172e36; color:var(--mint); font-size:25px; margin-bottom:14px; }
+    .result-content { padding:20px 22px 22px; }
+    .hidden { display:none !important; }
+    .summary { display:flex; gap:12px; align-items:flex-start; justify-content:space-between; padding:15px; border-radius:13px; background:#0c1424; border:1px solid var(--line); margin-bottom:16px; }
+    .action { display:inline-flex; align-items:center; border-radius:8px; padding:5px 9px; font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:.06em; }
+    .action.allow { background:#153c32; color:var(--mint); }
+    .action.queue_review { background:#3b2d16; color:var(--amber); }
+    .action.soft_hold { background:#3d2028; color:var(--red); }
+    .action.label { background:#20365c; color:var(--blue); }
+    .summary-title { font-size:18px; font-weight:750; margin:8px 0 3px; }
+    .muted { color:var(--muted); font-size:13px; }
+    .tag-row { display:flex; flex-wrap:wrap; gap:7px; margin:9px 0 17px; }
+    .tag { border:1px solid #34425d; border-radius:999px; padding:4px 9px; font-size:12px; color:#cfdaf0; }
+    .section-label { color:#92a3bf; font-size:10px; letter-spacing:.13em; text-transform:uppercase; font-weight:800; margin:18px 0 7px; }
+    .score-list { display:grid; gap:9px; }
+    .score { display:grid; grid-template-columns:108px 1fr 42px; gap:10px; align-items:center; font-size:12px; }
+    .track { height:7px; border-radius:99px; background:#28334a; overflow:hidden; }
+    .fill { height:100%; background:linear-gradient(90deg,#71e0bd,#8aafff); border-radius:99px; }
+    .score-num { text-align:right; color:#d8e2f3; font-variant-numeric:tabular-nums; }
+    .explanation { color:#d0d9e8; background:#0b1323; padding:12px 13px; border-radius:10px; border:1px solid #27344a; font-size:13px; }
+    details { margin-top:13px; border-top:1px solid var(--line); padding-top:13px; }
+    summary { color:#b7c6dd; cursor:pointer; font-size:13px; }
+    pre { white-space:pre-wrap; word-break:break-word; font-size:11px; color:#a8bad3; overflow:auto; }
+    .bottom-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; margin-top:20px; }
+    .mini { padding:17px; border:1px solid var(--line); border-radius:14px; background:#101829; }
+    .mini strong { display:block; font-size:13px; margin-bottom:5px; }
+    .mini span { display:block; color:var(--muted); font-size:12px; }
+    .foot { display:flex; justify-content:space-between; gap:14px; color:#71819c; font-size:11px; margin-top:30px; border-top:1px solid #202b40; padding-top:16px; }
+    .notice { border:1px solid #59472a; background:#211d16; color:#e7c98e; border-radius:11px; padding:11px 12px; font-size:12px; margin-bottom:15px; }
+    .error { color:var(--red); font-size:13px; margin-top:10px; }
+    @media(max-width:800px) { .hero,.layout { grid-template-columns:1fr; } .hero { gap:16px; margin-bottom:20px; } .top { margin-bottom:28px; } .result-empty { min-height:220px; } }
+    @media(max-width:500px) { .shell { width:calc(100% - 20px); padding-top:16px; } .bottom-grid { grid-template-columns:1fr; } .panel-head,.panel-body,.result-content { padding-left:15px; padding-right:15px; } .foot { flex-direction:column; } }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="top">
+      <div class="brand"><span class="logo" aria-hidden="true">◇</span> TrustGuard <span style="color:#73839d;font-weight:500">/ Content Risk Lab</span></div>
+      <div id="mode-pill" class="status">Loading mode…</div>
+    </header>
+    <section class="hero">
+      <div>
+        <div class="eyebrow">Trust &amp; Safety · Interactive demo</div>
+        <h1>Moderation that explains its reasoning.</h1>
+        <p class="lede">Analyze content for spam and policy risk, inspect the signals, and see when the safer decision is to ask a human. Designed for clarity, not blind automation.</p>
+      </div>
+      <aside class="hero-note"><strong>Reversible by design</strong>TrustGuard recommends allow, label, soft hold, or human review. This demo never bans users or deletes content.</aside>
+    </section>
+
+    <section class="layout">
+      <article class="panel">
+        <div class="panel-head"><h2>Analyze a message</h2><span class="muted">Max 20,000 characters</span></div>
+        <div class="panel-body">
+          <p class="hint">Use one of the safe examples or paste your own test text.</p>
+          <textarea id="content" maxlength="20000" placeholder="Paste a comment, review, or message to analyze…" aria-label="Content to analyze"></textarea>
+          <div class="sample-row" aria-label="Example messages">
+            <button class="sample" data-sample="benign">Benign message</button>
+            <button class="sample" data-sample="spam">Likely spam</button>
+            <button class="sample" data-sample="threat">Threat example</button>
+            <button class="sample" data-sample="quote">Quoted abuse</button>
+          </div>
+          <button id="analyze" class="primary">Analyze content <span aria-hidden="true">→</span></button>
+          <div id="error" class="error" role="alert"></div>
+          <div class="privacy">Privacy by default: the public demo does not save submitted message text or persist moderation results.</div>
+        </div>
+      </article>
+      <article class="panel" aria-live="polite">
+        <div class="panel-head"><h2>Moderation report</h2><span id="report-id" class="muted"></span></div>
+        <div id="empty" class="result-empty">
+          <div><div class="empty-mark" aria-hidden="true">⌁</div><strong style="display:block;color:#dbe6f7">Your report will appear here</strong><span class="muted">Submit content to inspect its risk signals and recommended action.</span></div>
+        </div>
+        <div id="result" class="result-content hidden"></div>
+      </article>
+    </section>
+
+    <section class="bottom-grid" aria-label="Design principles">
+      <div class="mini"><strong>Multiple signals</strong><span>Combines explainable heuristics, optional trained text classifiers, and optional hosted contextual analysis.</span></div>
+      <div class="mini"><strong>Human oversight</strong><span>Ambiguity and disagreement should lead to review, not irreversible punishment.</span></div>
+      <div class="mini"><strong>Honest evaluation</strong><span>Trained model benchmarks are versioned artifacts. The fallback is explicitly labelled as heuristics.</span></div>
+    </section>
+    <footer class="foot"><span>TrustGuard · Portfolio project · Not a production enforcement system</span><span id="policy-version">Policy version: loading… · <a href="/docs">API docs</a></span></footer>
+  </main>
+<script>
+  const samples = {
+    benign: "Hi team, could you send me the meeting notes when you have a chance? Thanks!",
+    spam: "CLICK HERE! Limited time offer, buy now and claim your prize https://a.example https://b.example https://c.example",
+    threat: "I will kill you if you come near me again.",
+    quote: "I am reporting this message because someone sent me: 'you are worthless'. Please help me report the harassment."
+  };
+  const content = document.getElementById('content');
+  const analyzeButton = document.getElementById('analyze');
+  const resultPanel = document.getElementById('result');
+  const emptyPanel = document.getElementById('empty');
+  const errorEl = document.getElementById('error');
+  const modePill = document.getElementById('mode-pill');
+  const labelsPretty = {spam:'Spam', harassment:'Harassment', hate:'Hate', threat:'Threat', sexual:'Sexual content', violence:'Violence', self_harm:'Self-harm', toxicity:'Toxicity', other:'Other'};
+  document.querySelectorAll('[data-sample]').forEach(button => button.addEventListener('click', () => { content.value = samples[button.dataset.sample]; content.focus(); errorEl.textContent=''; }));
+
+  function addText(tag, className, value) { const node = document.createElement(tag); if (className) node.className = className; node.textContent = value ?? ''; return node; }
+  function renderResult(data) {
+    resultPanel.replaceChildren();
+    const action = String(data.action || 'queue_review');
+    const summary = document.createElement('div'); summary.className = 'summary';
+    const left = document.createElement('div');
+    left.append(addText('span', `action ${action}`, action.replaceAll('_',' ')));
+    left.append(addText('div','summary-title', action === 'queue_review' ? 'Send to human review' : action === 'soft_hold' ? 'Reversible hold recommended' : action === 'allow' ? 'No strong risk signal found' : 'Apply a review label'));
+    left.append(addText('div','muted', data.requires_human_review ? 'Human review recommended' : 'No review required by current rules'));
+    summary.append(left); summary.append(addText('div','muted', data.model_backed ? 'Model-assisted' : 'Local baseline')); resultPanel.append(summary);
+    if (!data.model_backed) {
+      const notice = addText('div','notice','Local heuristic demo only. This is not a trained classifier, and scores are heuristic signals, not calibrated probabilities.');
+      resultPanel.append(notice);
+    } else if (data.model_scores && Object.keys(data.model_scores).length) {
+      const notice = addText('div','notice','Trained ML baseline active. These outputs are model scores, not guaranteed calibrated probabilities. Review the benchmark report and limitations before drawing conclusions.');
+      resultPanel.append(notice);
+    } else {
+      const notice = addText('div','notice','Hosted model assistance is active. Scores are signals, not calibrated probabilities.');
+      resultPanel.append(notice);
+    }
+    resultPanel.append(addText('div','section-label','Detected categories'));
+    const tags = document.createElement('div'); tags.className='tag-row';
+    const labels = Array.isArray(data.labels) ? data.labels : [];
+    if (labels.length) labels.forEach(label => tags.append(addText('span','tag',labelsPretty[label] || label)));
+    else tags.append(addText('span','muted','No category crossed the current label threshold.'));
+    resultPanel.append(tags);
+    if (data.model_scores && Object.keys(data.model_scores).length) {
+      resultPanel.append(addText('div','section-label','Trained model outputs'));
+      const trainedScores = document.createElement('div'); trainedScores.className='score-list';
+      Object.entries(data.model_scores).sort((a,b) => b[1]-a[1]).forEach(([task, score]) => {
+        const threshold = data.model_thresholds && data.model_thresholds[task];
+        const row = document.createElement('div'); row.className='score';
+        row.append(addText('span','',`${labelsPretty[task] || task} model`));
+        const track = document.createElement('div'); track.className='track';
+        const fill = document.createElement('div'); fill.className='fill'; fill.style.width = `${Math.max(0,Math.min(100,Number(score)*100))}%`; track.append(fill); row.append(track);
+        const suffix = Number.isFinite(Number(threshold)) ? ` / t=${Number(threshold).toFixed(2)}` : '';
+        row.append(addText('span','score-num',`${Number(score).toFixed(3)}${suffix}`)); trainedScores.append(row);
+      });
+      resultPanel.append(trainedScores);
+      resultPanel.append(addText('div','muted','Model scores are uncalibrated outputs. Compare each score with its validation-selected threshold; neither is a universal risk probability.'));
+    }
+    resultPanel.append(addText('div','section-label','Policy rationale'));
+    resultPanel.append(addText('div','explanation',data.rationale || 'No rationale available.'));
+    const scoreEntries = Object.entries(data.scores || {}).sort((a,b) => b[1]-a[1]);
+    if (scoreEntries.length) {
+      resultPanel.append(addText('div','section-label','Combined signal scores (not probabilities)'));
+      const scores = document.createElement('div'); scores.className='score-list';
+      scoreEntries.forEach(([label, score]) => {
+        const row = document.createElement('div'); row.className='score';
+        row.append(addText('span','',labelsPretty[label] || label));
+        const track = document.createElement('div'); track.className='track'; const fill = document.createElement('div'); fill.className='fill'; fill.style.width = `${Math.max(0,Math.min(100,Number(score)*100))}%`; track.append(fill); row.append(track);
+        row.append(addText('span','score-num',Number(score).toFixed(3))); scores.append(row);
+      }); resultPanel.append(scores);
+    }
+    if (data.evidence && data.evidence.length) {
+      resultPanel.append(addText('div','section-label','Signals / evidence'));
+      const evidence = document.createElement('div'); evidence.className='tag-row'; data.evidence.forEach(item => evidence.append(addText('span','tag',String(item)))); resultPanel.append(evidence);
+    }
+    if (data.warnings && data.warnings.length) { resultPanel.append(addText('div','section-label','Warnings')); data.warnings.forEach(w => resultPanel.append(addText('div','muted',`• ${w.replaceAll('_',' ')}`))); }
+    const details = document.createElement('details'); details.append(addText('summary','','Technical details'));
+    const pre = document.createElement('pre');
+    const technical = {moderation_id:data.moderation_id, execution_mode:data.execution_mode, detector_sources:data.detector_sources, model_scores:data.model_scores, model_thresholds:data.model_thresholds, contextual_assessment:data.contextual_assessment, policy_version:data.policy_version, created_at:data.created_at, review_case_id:data.review_case_id};
+    pre.textContent = JSON.stringify(technical,null,2); details.append(pre); resultPanel.append(details);
+    document.getElementById('report-id').textContent = data.moderation_id ? data.moderation_id.slice(0,8) : '';
+    emptyPanel.classList.add('hidden'); resultPanel.classList.remove('hidden');
+  }
+  analyzeButton.addEventListener('click', async () => {
+    const message = content.value.trim(); errorEl.textContent='';
+    if (!message) { errorEl.textContent='Enter a message or choose a sample first.'; return; }
+    analyzeButton.disabled=true; analyzeButton.textContent='Analyzing…';
+    try {
+      const response = await fetch('/api/v1/moderate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({content:message,source:'public_demo'}),signal:AbortSignal.timeout(90000)});
+      const data = await response.json(); if (!response.ok) throw new Error(data.detail || `Request failed (${response.status})`); renderResult(data);
+    } catch (err) { errorEl.textContent = err.name === 'TimeoutError' ? 'Analysis timed out. Try a shorter message.' : (err.message || 'Could not analyze this message.'); }
+    finally { analyzeButton.disabled=false; analyzeButton.innerHTML='Analyze content <span aria-hidden="true">→</span>'; }
+  });
+  (async function loadConfig(){
+    try { const response = await fetch('/api/v1/config'); const data = await response.json();
+      const trained = Array.isArray(data.trained_models_available) ? data.trained_models_available : [];
+      modePill.textContent = trained.length ? `Trained ML: ${trained.join(' + ')}` : (data.model_backed ? 'Provider-assisted mode' : 'Local heuristic mode');
+      document.getElementById('policy-version').textContent = `Policy version: ${data.policy_version} · `;
+      const link = document.createElement('a'); link.href='/docs'; link.textContent='API docs'; document.getElementById('policy-version').append(link);
+    } catch { modePill.textContent='Demo mode'; document.getElementById('policy-version').textContent='Policy version unavailable'; }
+  })();
+</script>
+</body>
+</html>

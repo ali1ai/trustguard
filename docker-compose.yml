@@ -1,0 +1,23 @@
+services:
+  trustguard:
+    build: .
+    ports:
+      - "8000:8000"
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      TRUSTGUARD_DB_PATH: /app/data/trustguard.db
+      STORE_CONTENT: "false"
+      ENABLE_REVIEW_QUEUE: "false"
+      SAVE_AUDIT_EVENTS: "false"
+    volumes:
+      - trustguard_data:/app/data
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 20s
+      timeout: 5s
+      retries: 3
+
+volumes:
+  trustguard_data:

@@ -1,0 +1,23 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.venv/
+env/
+.env
+*.db
+*.sqlite3
+.DS_Store
+.streamlit/
+data/*
+!data/.gitkeep
+!data/raw/
+data/raw/*
+!data/raw/README.md
+.coverage
+htmlcov/
+# Test-error exports can contain raw message text; keep local unless manually reviewed.
+reports/*_test_errors.csv
+
+# Jupyter working files
+.ipynb_checkpoints/

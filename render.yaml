@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: trustguard-demo
+    runtime: docker
+    plan: free
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: STORE_CONTENT
+        value: "false"
+      - key: ENABLE_REVIEW_QUEUE
+        value: "false"
+      - key: SAVE_AUDIT_EVENTS
+        value: "false"
+      - key: ENABLE_LLM_PROVIDERS
+        value: "false"
+      - key: ENABLE_CONTEXT_AGENT
+        value: "true"
+      - key: ENABLE_AUDIT_AGENT
+        value: "true"
+      - key: POLICY_VERSION
+        value: "2026-10-25-demo-v2"

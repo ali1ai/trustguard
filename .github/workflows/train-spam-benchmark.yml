@@ -1,0 +1,71 @@
+name: Train and benchmark spam model
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "src/trustguard/ml/**"
+      - "scripts/download_sms_dataset.py"
+      - "scripts/train_spam_classifier.py"
+      - "tests/test_training_pipeline.py"
+      - ".github/workflows/train-spam-benchmark.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  train-and-report:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install training dependencies
+        run: python -m pip install -e ".[dev]"
+      - name: Download official UCI dataset
+        run: python scripts/download_sms_dataset.py
+      - name: Train and evaluate on held-out test data
+        run: python scripts/train_spam_classifier.py
+      - name: Verify loadable artifact and summarize benchmark
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          from trustguard.ml.classifier import load_classifier
+
+          artifact = load_classifier("models/spam_classifier.joblib", "spam")
+          assert artifact is not None, "Trained spam artifact was not loadable"
+          probe_score = artifact.score("Congratulations, claim your prize by clicking now")
+          report = json.loads(Path("reports/spam_evaluation.json").read_text(encoding="utf-8"))
+          metrics = report["test_metrics"]
+          summary = [
+              "## TrustGuard spam benchmark",
+              f"- Dataset rows before deduplication: {report['split']['input_rows']}",
+              f"- Unique rows evaluated: {report['split']['rows_total']}",
+              f"- Duplicate rows removed: {report['split']['duplicate_rows_removed']}",
+              f"- Conflicting-label rows removed: {report['split']['conflicting_rows_removed']}",
+              f"- Selected model: `{report['selection']['selected_model']}`",
+              f"- Validation-selected threshold: {artifact.threshold:.3f}",
+              f"- Held-out test macro-F1: {metrics['macro_f1']:.4f}",
+              f"- Spam precision / recall / F1: {metrics['precision_positive']:.4f} / {metrics['recall_positive']:.4f} / {metrics['f1_positive']:.4f}",
+              f"- False-positive rate: {metrics['false_positive_rate']:.4f}",
+              f"- Artifact smoke-test score (not a benchmark): {probe_score:.4f}",
+          ]
+          with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as handle:
+              handle.write("\n".join(summary) + "\n")
+          print("Artifact load and inference smoke test passed.")
+          PY
+      - name: Upload model and evaluation report
+        uses: actions/upload-artifact@v7
+        with:
+          name: trustguard-spam-model-and-evaluation
+          path: |
+            models/spam_classifier.joblib
+            reports/spam_evaluation.json
+            reports/spam_model_card.md
+          if-no-files-found: error
+          retention-days: 30
