@@ -1,0 +1,209 @@
+{
+  "task": "toxicity",
+  "dataset": {
+    "name": "google/civil_comments",
+    "card_url": "https://huggingface.co/datasets/google/civil_comments",
+    "license": "CC0 1.0 (as listed on the Hugging Face dataset card)",
+    "score_threshold": 0.5,
+    "label_columns": [
+      "toxicity",
+      "severe_toxicity",
+      "obscene",
+      "threat",
+      "insult",
+      "identity_attack",
+      "sexual_explicit"
+    ]
+  },
+  "sample_sizes_after_duplicate_checks": {
+    "train": 59721,
+    "validation": 14905,
+    "test": 14899
+  },
+  "leakage_audit": {
+    "cross_split_normalized_text_groups_removed_from_all_splits": 126,
+    "within_split_duplicate_rows_removed": {
+      "train": 92,
+      "validation": 6,
+      "test": 7
+    },
+    "conflicting_binary_label_groups_removed": {
+      "train": 4,
+      "validation": 3,
+      "test": 0
+    }
+  },
+  "selected_model": "word_char_tfidf_logistic_regression",
+  "selected_threshold": 0.8,
+  "threshold_selection_split": "validation",
+  "candidate_validation_results": [
+    {
+      "model": "word_char_tfidf_logistic_regression",
+      "validation_threshold": 0.8,
+      "validation_precision": 0.7220670391061452,
+      "validation_recall": 0.4403747870528109,
+      "validation_f1": 0.5470899470899471,
+      "validation_macro_f1": 0.7582154606509908,
+      "validation_average_precision": 0.6266933218244349,
+      "precision_floor_met": true,
+      "fit_seconds": 86.0
+    },
+    {
+      "model": "word_tfidf_logistic_regression",
+      "validation_threshold": 0.74,
+      "validation_precision": 0.7020958083832335,
+      "validation_recall": 0.39948892674616693,
+      "validation_f1": 0.509229098805646,
+      "validation_macro_f1": 0.7384532221717017,
+      "validation_average_precision": 0.5891509050980837,
+      "precision_floor_met": true,
+      "fit_seconds": 24.8
+    }
+  ],
+  "primary_toxicity_test_metrics": {
+    "n": 14899,
+    "positive_support": 1191,
+    "threshold": 0.8,
+    "accuracy": 0.9405329216725955,
+    "balanced_accuracy": 0.7104618102846536,
+    "precision": 0.7074829931972789,
+    "recall": 0.436607892527288,
+    "f1": 0.5399792315680166,
+    "macro_f1": 0.7540955285279808,
+    "false_positive_rate": 0.01568427195798074,
+    "roc_auc": 0.9144376766023359,
+    "average_precision": 0.624866645435997,
+    "confusion_matrix": [
+      [
+        13493,
+        215
+      ],
+      [
+        671,
+        520
+      ]
+    ]
+  },
+  "per_label_test_metrics": [
+    {
+      "label": "toxicity",
+      "selected_threshold": 0.8,
+      "test_n": 14899,
+      "test_positive_support": 1191,
+      "test_threshold": 0.8,
+      "test_accuracy": 0.9405329216725955,
+      "test_balanced_accuracy": 0.7104618102846536,
+      "test_precision": 0.7074829931972789,
+      "test_recall": 0.436607892527288,
+      "test_f1": 0.5399792315680166,
+      "test_macro_f1": 0.7540955285279808,
+      "test_false_positive_rate": 0.01568427195798074,
+      "test_roc_auc": 0.9144376766023359,
+      "test_average_precision": 0.624866645435997,
+      "test_confusion_matrix": "[[13493, 215], [671, 520]]",
+      "validation_precision_floor_met": null,
+      "fit_seconds": null
+    },
+    {
+      "label": "obscene",
+      "selected_threshold": 0.37,
+      "test_n": 14899,
+      "test_positive_support": 90,
+      "test_threshold": 0.37,
+      "test_accuracy": 0.9928854285522518,
+      "test_balanced_accuracy": 0.7258532724094207,
+      "test_precision": 0.41836734693877553,
+      "test_recall": 0.45555555555555555,
+      "test_f1": 0.43617021276595747,
+      "test_macro_f1": 0.7162951705504896,
+      "test_false_positive_rate": 0.00384901073671416,
+      "test_roc_auc": 0.937477960099339,
+      "test_average_precision": 0.3484500808951544,
+      "test_confusion_matrix": "[[14752, 57], [49, 41]]",
+      "validation_precision_floor_met": false,
+      "fit_seconds": 16.2
+    },
+    {
+      "label": "threat",
+      "selected_threshold": 0.54,
+      "test_n": 14899,
+      "test_positive_support": 27,
+      "test_threshold": 0.54,
+      "test_accuracy": 0.9973823746560172,
+      "test_balanced_accuracy": 0.6659606419221804,
+      "test_precision": 0.3,
+      "test_recall": 0.3333333333333333,
+      "test_f1": 0.3157894736842105,
+      "test_macro_f1": 0.6572390763061449,
+      "test_false_positive_rate": 0.0014120494889725659,
+      "test_roc_auc": 0.9558304942920327,
+      "test_average_precision": 0.20477804334007774,
+      "test_confusion_matrix": "[[14851, 21], [18, 9]]",
+      "validation_precision_floor_met": false,
+      "fit_seconds": 16.7
+    },
+    {
+      "label": "insult",
+      "selected_threshold": 0.74,
+      "test_n": 14899,
+      "test_positive_support": 895,
+      "test_threshold": 0.74,
+      "test_accuracy": 0.9575139271092019,
+      "test_balanced_accuracy": 0.7520056520164231,
+      "test_precision": 0.6966966966966966,
+      "test_recall": 0.5184357541899441,
+      "test_f1": 0.5944907110826393,
+      "test_macro_f1": 0.7860366577334789,
+      "test_false_positive_rate": 0.014424450157097972,
+      "test_roc_auc": 0.9264552506147486,
+      "test_average_precision": 0.644458622129804,
+      "test_confusion_matrix": "[[13802, 202], [431, 464]]",
+      "validation_precision_floor_met": true,
+      "fit_seconds": 20.2
+    },
+    {
+      "label": "identity_attack",
+      "selected_threshold": 0.83,
+      "test_n": 14899,
+      "test_positive_support": 108,
+      "test_threshold": 0.83,
+      "test_accuracy": 0.990267803208269,
+      "test_balanced_accuracy": 0.6182406969202994,
+      "test_precision": 0.29213483146067415,
+      "test_recall": 0.24074074074074073,
+      "test_f1": 0.2639593908629442,
+      "test_macro_f1": 0.6295304538517957,
+      "test_false_positive_rate": 0.004259346900141978,
+      "test_roc_auc": 0.9539403340870449,
+      "test_average_precision": 0.2354070935546815,
+      "test_confusion_matrix": "[[14728, 63], [82, 26]]",
+      "validation_precision_floor_met": false,
+      "fit_seconds": 15.8
+    },
+    {
+      "label": "sexual_explicit",
+      "selected_threshold": 0.46,
+      "test_n": 14899,
+      "test_positive_support": 29,
+      "test_threshold": 0.46,
+      "test_accuracy": 0.9973152560574535,
+      "test_balanced_accuracy": 0.6028766551492243,
+      "test_precision": 0.2608695652173913,
+      "test_recall": 0.20689655172413793,
+      "test_f1": 0.23076923076923078,
+      "test_macro_f1": 0.6147122560758007,
+      "test_false_positive_rate": 0.0011432414256893073,
+      "test_roc_auc": 0.8879623402824478,
+      "test_average_precision": 0.12051472542270787,
+      "test_confusion_matrix": "[[14853, 17], [23, 6]]",
+      "validation_precision_floor_met": false,
+      "fit_seconds": 17.5
+    }
+  ],
+  "caveats": [
+    "This is a research/demo model, not a standalone enforcement system.",
+    "Scores have not been independently calibrated.",
+    "Civil Comments does not represent every platform, community, dialect, or policy.",
+    "Subtype models are evaluated separately and are not yet wired into the runtime app."
+  ]
+}
